@@ -14,18 +14,21 @@ struct FavouritesView: View {
     var body: some View {
         NavigationView() {
             if (favourites.favouritePokemon != []) {
-                
-                ForEach(favourites.favouritePokemon, id: \.id) { pokemon in
+                List(favourites.favouritePokemon, id: \.id) { pokemon in
                     PokemonCell(pokemon: pokemon)
+                }.toolbar{
+                    ToolbarItem(placement: .principal) {
+                        Text("Favourites")
+                    }
                 }
-                
             } else {
-                VStack {
-                    Text("You have no favourites yet")
+                Text("You have no favourites yet")
+                    .toolbar{
+                    ToolbarItem(placement: .principal) {
+                        Text("Favourites")
+                    }
                 }
-                
             }
-            
         }
     }
 }

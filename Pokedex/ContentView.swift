@@ -10,32 +10,24 @@ import Combine
 
 struct ContentView: View {
     
-    @EnvironmentObject var pokemonStore: PokemonStore
+    @State var selection: Selection = .pokedex
     
     var body: some View {
-        TabView(selection: /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Selection@*/.constant(1)/*@END_MENU_TOKEN@*/) {
-            NavigationView(){
-                List(pokemonStore.pokemons) { pokemon in
-                    PokemonCell(pokemon: pokemon)
-                }
-            }
-            .onAppear(perform: handleOnAppear)
-            .tabItem {
-                Image(systemName: "circle.fill"); Text("Pokedex")
-            }.tag(1)
+        TabView(selection: $selection) {
             
-            FavouritesView().tabItem {Image(systemName: "heart.fill"); Text("Favourites") }.tag(2)
+            PokedexView().tabItem {Image(systemName: "circle.fill"); Text("Pokedex")
+            }.tag(Selection.pokedex)
+            
+            FavouritesView().tabItem {Image(systemName: "heart.fill"); Text("Favourites")
+            }.tag(Selection.favourites)                
         }
     }
 }
 
-// MARK: Action handlers
-private extension ContentView {
-    
-    func handleOnAppear() {
-        pokemonStore.loadData()
-    }
+enum Selection{
+    case pokedex, favourites
 }
+
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {

@@ -17,42 +17,46 @@ struct PokemonDetailView: View {
     }
     
     var body: some View {
-        
-        Text("# \(pokemon.id)     \(pokemon.name)").font(.title)
-        AsyncImage(
-            url: simplePokemon.imageUrl,
-            content: { image in
-                image
-                    .resizable()
-            },
-            placeholder: {
-                ProgressView()
-            }
-        ).frame(width: 300, height: 300)
+        ScrollView{
+            Text("# \(pokemon.id)     \(pokemon.name)").font(.title)
+            AsyncImage(
+                url: simplePokemon.imageUrl,
+                content: { image in
+                    image
+                        .resizable()
+                },
+                placeholder: {
+                    ProgressView()
+                }
+            )
+            .animation(.interpolatingSpring(stiffness: 1, damping: 1).speed(3))
+            .frame(width: 300, height: 300)
             .onAppear{
                 pokemonStore.loadDetails(id: simplePokemon.id)
             }
-        VStack{
-            ForEach(pokemon.types) {type in
-                Text(type.type.name)
-                    .padding(10)
-                    .background(Color.blue.cornerRadius(20))
-                    .padding(5)
-                    .foregroundColor(.white)
+            
+            VStack{
+                ForEach(pokemon.types) {type in
+                    Text(type.type.name)
+                        .padding(10)
+                        .background(Color.blue.cornerRadius(20))
+                        .padding(5)
+                        .foregroundColor(.white)
+                }
             }
-        }
-        .toolbar() {
-            ToolbarItem(placement: ToolbarItemPlacement.navigationBarTrailing) {
-                HStack {
-                    Button(
-                        action: {
-                            favourites.toggleFavorite(simplePokemon)
-                        },
-                        label: {
-                            let isFavorite = favourites.isFavorite(simplePokemon)
-                            Image(systemName: isFavorite ? "heart.fill" : "heart")
-                        }
-                    )
+            .toolbar() {
+                ToolbarItem(placement: ToolbarItemPlacement.navigationBarTrailing) {
+                    HStack {
+                        Button(
+                            action: {
+                                favourites.toggleFavorite(simplePokemon)
+                            },
+                            label: {
+                                let isFavorite = favourites.isFavorite(simplePokemon)
+                                Image(systemName: isFavorite ? "heart.fill" : "heart")
+                            }
+                        )
+                    }
                 }
             }
         }
